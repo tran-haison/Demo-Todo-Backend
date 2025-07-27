@@ -14,8 +14,9 @@ A simple CRUD (Create, Read, Update, Delete) todo list API built with Node.js, E
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- MongoDB (local installation or MongoDB Atlas)
+- Node.js (v14 or higher) - for local development
+- MongoDB (local installation or MongoDB Atlas) - for local development
+- Docker and Docker Compose - for containerized deployment
 
 ## Installation
 
@@ -40,17 +41,69 @@ A simple CRUD (Create, Read, Update, Delete) todo list API built with Node.js, E
 
 ## Running the Application
 
-### Development mode (with auto-restart):
+### Option 1: Local Development
+
+#### Development mode (with auto-restart):
 ```bash
 npm run dev
 ```
 
-### Production mode:
+#### Production mode:
 ```bash
 npm start
 ```
 
 The server will start on `http://localhost:3000`
+
+### Option 2: Docker Compose (Recommended)
+
+#### Production mode with Docker:
+```bash
+# Build and start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+#### Development mode with Docker:
+```bash
+# Build and start all services in development mode
+docker-compose -f docker-compose.dev.yml up -d
+
+# View logs
+docker-compose -f docker-compose.dev.yml logs -f
+
+# Stop all services
+docker-compose -f docker-compose.dev.yml down
+```
+
+#### Access the services:
+- **Todo API**: http://localhost:3000
+- **MongoDB Express (Admin UI)**: http://localhost:8081
+  - Username: `admin`
+  - Password: `password123`
+
+#### Docker commands:
+```bash
+# Rebuild containers after code changes
+docker-compose build
+
+# View running containers
+docker-compose ps
+
+# Access container shell
+docker-compose exec app sh
+
+# View MongoDB logs
+docker-compose logs mongodb
+
+# Clean up everything (including volumes)
+docker-compose down -v
+```
 
 ## API Endpoints
 
@@ -170,6 +223,13 @@ curl -X DELETE http://localhost:3000/api/todos/TODO_ID
 ├── config.env           # Environment variables
 ├── package.json         # Dependencies
 ├── server.js           # Main server file
+├── Dockerfile          # Production Docker image
+├── Dockerfile.dev      # Development Docker image
+├── docker-compose.yml  # Production Docker Compose
+├── docker-compose.dev.yml # Development Docker Compose
+├── mongo-init.js       # MongoDB initialization script
+├── healthcheck.js      # Docker health check
+├── .dockerignore       # Docker ignore file
 └── README.md           # This file
 ```
 
