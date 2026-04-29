@@ -1,34 +1,11 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - 'echo "$$DOCKERHUB_TOKEN" | docker login -u "${_DOCKERHUB_USERNAME}" --password-stdin'
-    secretEnv:
-      - 'DOCKERHUB_TOKEN'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - '${_DOCKERHUB_USERNAME}/${_IMAGE}:$SHORT_SHA'
-      - '.'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - '${_DOCKERHUB_USERNAME}/${_IMAGE}:$SHORT_SHA'
-
   - name: 'gcr.io/cloud-builders/gke-deploy'
     args:
       - 'run'
       - '--filename=k8s/'
-      - '--image=${_DOCKERHUB_USERNAME}/${_IMAGE}:$SHORT_SHA'
+      - '--image=${_DOCKERHUB_USERNAME}/${_IMAGE}:${_IMAGE_TAG}'
       - '--location=${_GKE_LOCATION}'
       - '--cluster=${_GKE_CLUSTER}'
-
-images:
-  - '${_DOCKERHUB_USERNAME}/${_IMAGE}:$SHORT_SHA'
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -36,10 +13,6 @@ options:
 substitutions:
   _DOCKERHUB_USERNAME: 'sonth2501'
   _IMAGE: 'todo-backend'
+  _IMAGE_TAG: 'latest'
   _GKE_LOCATION: 'australia-southeast2'
   _GKE_CLUSTER: 'capstone-cluster'
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/$PROJECT_ID/secrets/docker-hub-access-token/versions/latest
-      env: 'DOCKERHUB_TOKEN'
