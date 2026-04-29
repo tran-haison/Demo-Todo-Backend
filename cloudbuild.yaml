@@ -1,0 +1,30 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_AR_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
+      - '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_AR_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
+
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - 'run'
+      - '--filename=k8s/'
+      - '--image=${_AR_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
+      - '--location=${_GKE_LOCATION}'
+      - '--cluster=${_GKE_CLUSTER}'
+
+images:
+  - '${_AR_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:$SHORT_SHA'
+
+substitutions:
+  _AR_REGION: 'australia-southeast2'
+  _REPOSITORY: 'capstone'
+  _IMAGE: 'todo-backend'
+  _GKE_LOCATION: 'australia-southeast2'
+  _GKE_CLUSTER: 'capstone-cluster'

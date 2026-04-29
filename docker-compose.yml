@@ -7,9 +7,9 @@ services:
     container_name: todo-mongodb
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password123
-      MONGO_INITDB_DATABASE: todo-list
+      MONGO_ROOT_USERNAME: admin
+      MONGO_ROOT_PASSWORD: password123
+      MONGO_DATABASE: todo-list
     ports:
       - "27017:27017"
     volumes:
