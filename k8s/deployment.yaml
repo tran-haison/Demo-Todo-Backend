@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todo-backend
-        image: australia-southeast2-docker.pkg.dev/sit737-26t1-tran-57d9ffa/capstone/todo-backend:latest
+        image: sonth2501/todo-backend:latest
         ports:
         - containerPort: 3000
         livenessProbe:
