@@ -1,16 +1,15 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gke-deploy'
+  - name: 'gcr.io/cloud-builders/git'
     args:
-      - 'run'
-      - '--filename=k8s/'
-      - '--image=${_DOCKERHUB_USERNAME}/${_IMAGE}:${_IMAGE_TAG}'
-      - '--location=${_GKE_LOCATION}'
-      - '--cluster=${_GKE_CLUSTER}'
+      - 'clone'
+      - '${_GITHUB_REPO_URL}'
+      - '/workspace/repo-src'
 
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: NONE
 
 substitutions:
+  _GITHUB_REPO_URL: 'https://github.com/tran-haison/Demo-Todo-Backend.git'
   _DOCKERHUB_USERNAME: 'sonth2501'
   _IMAGE: 'todo-backend'
   _IMAGE_TAG: 'latest'
