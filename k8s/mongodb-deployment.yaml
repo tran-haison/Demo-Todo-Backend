@@ -24,6 +24,10 @@ spec:
         volumeMounts:
         - name: mongodb-data
           mountPath: /data/db
+        - name: mongodb-init-script
+          mountPath: /docker-entrypoint-initdb.d/mongo-init.js
+          subPath: mongo-init.js
+          readOnly: true
         livenessProbe:
           tcpSocket:
             port: 27017
@@ -38,3 +42,6 @@ spec:
       - name: mongodb-data
         persistentVolumeClaim:
           claimName: mongodb-pvc
+      - name: mongodb-init-script
+        configMap:
+          name: mongodb-init-script
